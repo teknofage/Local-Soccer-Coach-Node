@@ -1,0 +1,31 @@
+{
+  "name": "local_soccer_coach",
+  "version": "1.0.0",
+  "description": "<!-- Headings --> # **Local Soccer Coach**",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/teknofage/Local-Soccer-Coach-Node.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/teknofage/Local-Soccer-Coach-Node/issues"
+  },
+  "homepage": "https://github.com/teknofage/Local-Soccer-Coach-Node#readme",
+  "dependencies": {
+    "@handlebars/allow-prototype-access": "^1.0.3",
+    "bcryptjs": "^2.4.3",
+    "cookie-parser": "^1.4.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "express-handlebars": "^5.1.0",
+    "express-validator": "^5.3.1",
+    "handlebars": "^4.7.6",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.9.25"
+  }
+}
