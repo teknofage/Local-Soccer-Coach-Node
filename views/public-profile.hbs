@@ -1,5 +1,5 @@
 
-
+ {{> navbar}}
 {{> messages }}
 {{#if username}}
 <h2>{{ username }}'s profile</h2>
@@ -7,6 +7,14 @@
   <tr>
     <td>Name:</td>
     <td>{{ name }}</td>
+  </tr>
+  <tr>
+    <td>Role: (e.g. Coach, Scout, League Administrator)</td>
+    <td>{{ role }}</td>
+  </tr>
+  <tr>
+    <td>Sport(s):</td>
+    <td>{{ sport }}</td>
   </tr>
   <tr>
     <td>Biography:</td>
@@ -20,5 +28,14 @@
     <td>Resume:</td>
     <td>{{ resume }}</td>
   </tr>
+    <tr>
+    <td>Email:</td>
+    <td>{{ email }}</td>
+  </tr>
+    <tr>
+    <td>Phone:</td>
+    <td>{{ phone }}</td>
+  </tr>
 </table>
+
 {{/if}}
