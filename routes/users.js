@@ -46,15 +46,20 @@ router.post('/', (req, res, next) => {
   if (!req.isAuthenticated()) {
     res.redirect('/auth/login');
   }
+  console.log(req)
+  if (!req.files) {
+    return res.status(400).send('No files were selected')
+  }
+
 
   const users = req.app.locals.users;
   const { name, role, sport, biography, profilepicture, resume, email, phone } = req.body;
   const _id = ObjectID(req.session.passport.user);
 
 //   profile photo file
-  const body = req.body;
+//   const body = req.body;
   // Get the image data from the req.body
-  const picimageFile = req.files.image;
+  const picimageFile = req.files.profilepicture;
   // Split the name on the .
   const picfileNameArray = picimageFile.name.split('.');
   // get the file extension
@@ -67,7 +72,7 @@ router.post('/', (req, res, next) => {
 //   resume file
 // const body = req.body;
 // Get the image data from the req.body
-const resimageFile = req.files.image;
+const resimageFile = req.files.resume;
 // Split the name on the .
 const resfileNameArray = resimageFile.name.split('.');
 // get the file extension
@@ -79,12 +84,18 @@ const resuploadPath = `./uploads/${resfilePath}`;
 
   // Move the uploaded file to the upload path this "saves" the file.
   // This should move the file to the uploads directory
-  imageFile.mv(uploadPath, (err) => {
+  picimageFile.mv(picuploadPath, (err) => {
     // Check for errors
     if (err) {
       console.log(err);
       return res.status(500)
     }
+    resimageFile.mv(resuploadPath, (err) => {
+        // Check for errors
+        if (err) {
+            console.log(err);
+            return res.status(500)
+        }
     // If no error make a post that includes the path to the file.
     users.updateOne({ _id }, { $set: { name, role, sport, biography, profilePhotoPath:picfilePath, resumePath:resfilePath, email, phone } }, (err) => {
         if (err) {
@@ -95,6 +106,7 @@ const resuploadPath = `./uploads/${resfilePath}`;
       });
   });
 
+});
 });
 // --------------------------------------------------
 
