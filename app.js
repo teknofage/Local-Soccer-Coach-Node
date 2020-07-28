@@ -13,6 +13,7 @@ const Strategy = require('passport-local').Strategy;
 const authUtils = require('./utils/auth');
 const session = require('express-session');
 const flash = require('connect-flash');
+const fileupload = require('express-fileupload');
 // --------------------------------------------------
 
 var indexRouter = require('./routes/index');
@@ -32,9 +33,11 @@ MongoClient.connect('mongodb://localhost', { useNewUrlParser: true }, (err, clie
     throw err;
   }
 
-  const db = client.db('account-app');
+  const db = client.db('lcsn-db');
   const users = db.collection('users');
+  const profiles = db.collection('profiles');
   app.locals.users = users;
+  app.locals.profiles = profiles;
 });
 // --------------------------------------------------
 
@@ -85,6 +88,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(fileupload());
 
 
 // Configure session, passport, flash

@@ -19,6 +19,7 @@
     <div class="form-group">
     <label for="name">Profile Picture:</label>
     <input type="file" class="form-control" name="profilepicture" id="profilepicture" value="{{ profilepicture }}">
+    {{!-- <button id="browse" input type="file">Select Files</button> --}}
   </div>
     <div class="form-group">
     <label for="name">Resume:</label>
@@ -36,5 +37,26 @@
   </div>
   <button class="btn btn-primary">Update</button>
 </form>
+
+<script>
+  document.getElementById('browse').addEventListener('click', function () {
+    var uppy = window.Robodog.pick({
+      providers: [ 'instagram', 'url', 'webcam', 'dropbox', 'google-drive', 'facebook', 'onedrive' ],
+      waitForEncoding: true,
+      params: {
+        // To avoid tampering, use Signature Authentication
+        auth: { key: '066f3515ddc04adf80d17e5ce1c680f7' },
+        template_id: '1cad1a9111ec48d99e662419a54ec9cf'
+      }
+    }).then(function (bundle) {
+      // Due to `waitForEncoding: true` this is fired after encoding is done.
+      // Alternatively, set `waitForEncoding` to `false` and provide a `notify_url`
+      // for Async Mode where your back-end receives the encoding results
+      // so that your user can be on their way as soon as the upload completes.
+      console.log(bundle.transloadit) // Array of Assembly Statuses
+      console.log(bundle.results)     // Array of all encoding results
+    }).catch(console.error)
+  })
+</script>
 
 <p><a href="/users/{{username}}" target="_blank">View your profile</a></p>

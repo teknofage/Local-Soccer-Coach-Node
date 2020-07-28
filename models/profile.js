@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 const Schema = mongoose.Schema;
 
-const ProfileSchema = new Schema({
+const profileSchema = new Schema({
   name: { type: String, required: true },
   role: {type: String, select: false },
   sports: {type: String, select: false },
@@ -14,3 +14,6 @@ const ProfileSchema = new Schema({
 //   posts: [{ type: Schema.Types.ObjectId, ref: "Post" }],
 //   comments: [{ type: Schema.Types.ObjectId, ref: "Comment" }]
 });
+
+var profileModel = mongoose.model('Profile', profileSchema);
+module.exports=profileModle;
