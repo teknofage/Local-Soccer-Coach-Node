@@ -74,12 +74,16 @@ router.post('/', (req, res, next) => {
     console.log("*******************************************")
     console.log(req.files.profilepicture)
     console.log(req.files.resume)
+    const profilepicture = req.files.profilepicture
+    const resume = req.files.resume
     // if there is a picture:
-    transloadit.addFile('mypic', './chameleon.jpg')
-
+    if(profilepicture) {
+        transloadit.addFile(profilepicture.name, profilepicture.tempFilePath)
+    }
     // if there is a pdf:
-    transloadit.addFile('myresume', './chameleon.pdf')
-
+    if(resume) {
+        transloadit.addFile(resume.name, resume.tempFilePath)
+    }
     // Start the Assembly
     transloadit.createAssembly(options, (err, result) => {
         if (err) {
