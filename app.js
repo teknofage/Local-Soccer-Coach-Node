@@ -35,10 +35,11 @@ var app = express();
 
 // Connect to db
 // --------------------------------------------------
-MongoClient.connect('mongodb://localhost', { useNewUrlParser: true }, (err, client) => {
+MongoClient.connect(process.env.MONGODB_URI || 'mongodb://localhost', { useNewUrlParser: true }, (err, client) => {
   if (err) {
     throw err;
   }
+
 
   const db = client.db('lscn-db');
   const users = db.collection('users');
