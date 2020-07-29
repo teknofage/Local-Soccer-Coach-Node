@@ -99,7 +99,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(fileupload());
+app.use(fileupload({
+    useTempFiles:true,
+    tempFileDir: '/tmp/'
+}));
 // enable CORS
 app.use(cors());
 // add other middleware

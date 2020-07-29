@@ -67,13 +67,12 @@ router.post('/', (req, res, next) => {
     
     // Set Encoding Instructions
     const options = {
+        waitForCompletion: true,
         params: {
             template_id: process.env.templateId,
         }
     }
     
-
-
     // Add files to upload
     // check which files have been added and whether there are 1 or 2 files, check file inputs
     // if the form element has a file, upload it, otherwise don't do anything.
@@ -83,8 +82,11 @@ router.post('/', (req, res, next) => {
     console.log(req.files.resume)
     const profilepicture = req.files.profilepicture
     const resume = req.files.resume
+    // console.log(profilepicture.path)
+
     // if there is a picture:
     if(profilepicture) {
+        console.log(profilepicture.name, profilepicture.tempFilePath)
         transloadit.addFile(profilepicture.name, profilepicture.tempFilePath)
     }
     // if there is a pdf:
@@ -92,140 +94,105 @@ router.post('/', (req, res, next) => {
         transloadit.addFile(resume.name, resume.tempFilePath)
     }
     // Start the Assembly
+    console.log('+++++++++++++++++++++++++++++++++++++++++++++++++++++')
     transloadit.createAssembly(options, (err, result) => {
-    if (err) {
-        console.log({ err })
-        console.log('fail')
+        if (err) {
+            console.log({ err })
+            console.log('fail')
+            // response redirect to upload failure
+
         } else {
-        console.log('success')
+            console.log('success')
+            console.log({ result })
+            console.log(result['uploads'][0]["ssl_url"])
+            // response redirect to display file needed here
+            const users = req.app.locals.users;
+            const { name, role, sport, biography, _, __, email, phone } = req.body;
+            const _id = ObjectID(req.session.passport.user);
+            const profilepicture = result['uploads'][0]["ssl_url"]
+            const resume = result['uploads'][1]["ssl_url"]
+          
+          
+              // If no error make a post that includes the path to the file.
+              users.updateOne({ _id }, { $set: { name, role, sport, biography, profilepicture, resume, email, phone } }, (err) => {
+                  if (err) {
+                    throw err;
+                  }
+                  
+                  res.redirect('/users');
+                });
         }
-        console.log({ result })
+        
     })
   
-    // return res.status(400).send('No files were selected')
   }
 
 
-  const users = req.app.locals.users;
-  const { name, role, sport, biography, profilepicture, resume, email, phone } = req.body;
-  const _id = ObjectID(req.session.passport.user);
 
- 
-//   profile photo file
-//   const body = req.body;
-  // Get the image data from the req.body
-//   const picimageFile = req.files.profilepicture;
-//   // Split the name on the .
-//   const picfileNameArray = picimageFile.name.split('.');
-//   // get the file extension
-//   const picfileExtsion = picfileNameArray[picfileNameArray.length - 1];
-//   // generate a short id with the same file extension
-//   const picfilePath = `/${shortid.generate()}.${picfileExtsion}`;
-//   // Define the upload path
-//   const picuploadPath = `./uploads/${picfilePath}`;
-
-// //   resume file
-// // const body = req.body;
-// // Get the image data from the req.body
-// const resimageFile = req.files.resume;
-// // Split the name on the .
-// const resfileNameArray = resimageFile.name.split('.');
-// // get the file extension
-// const resfileExtsion = resfileNameArray[resfileNameArray.length - 1];
-// // generate a short id with the same file extension
-// const resfilePath = `/${shortid.generate()}.${resfileExtsion}`;
-// // Define the upload path
-// const resuploadPath = `./uploads/${resfilePath}`;
-
-  // Move the uploaded file to the upload path this "saves" the file.
-  // This should move the file to the uploads directory
-//   picimageFile.mv(picuploadPath, (err) => {
-//     // Check for errors
-//     if (err) {
-//       console.log(err);
-//       return res.status(500)
-//     }
-//     resimageFile.mv(resuploadPath, (err) => {
-//         // Check for errors
-//         if (err) {
-//             console.log(err);
-//             return res.status(500)
-//         }
-
-
-// });
-    // If no error make a post that includes the path to the file.
-    users.updateOne({ _id }, { $set: { name, role, sport, biography, profilepicture, resume, email, phone } }, (err) => {
-        if (err) {
-          throw err;
-        }
-        
-        res.redirect('/users');
-      });
   });
 // });
 // --------------------------------------------------
-// allow users to upload SINGLE profile image
-router.post('/upload-avatar', upload.single('avatar'), async (req, res) => {
-    try {
-        const avatar = req.file;
+// // allow users to upload SINGLE profile image
+// router.post('/upload-avatar', upload.single('avatar'), async (req, res) => {
+//     try {
+//         const avatar = req.file;
 
-        // make sure file is available
-        if (!avatar) {
-            res.status(400).send({
-                status: false,
-                data: 'No file is selected.'
-            });
-        } else {
-            // send response
-            res.send({
-                status: true,
-                message: 'File is uploaded.',
-                data: {
-                    name: avatar.originalname,
-                    mimetype: avatar.mimetype,
-                    size: avatar.size
-                }
-            });
-        }
+//         // make sure file is available
+//         if (!avatar) {
+//             res.status(400).send({
+//                 status: false,
+//                 data: 'No file is selected.'
+//             });
+//         } else {
+//             // send response
+//             res.send({
+//                 status: true,
+//                 message: 'File is uploaded.',
+//                 data: {
+//                     name: avatar.originalname,
+//                     mimetype: avatar.mimetype,
+//                     size: avatar.size
+//                 }
+//             });
+//         }
 
-    } catch (err) {
-        res.status(500).send(err);
-    }
-});
+//     } catch (err) {
+//         res.status(500).send(err);
+//     }
+// });
 
-// allow users to upload MULTIPLE images
-router.post('/upload-photos', upload.array('photos', 8), async (req, res) => {
-    try {
-        const photos = req.files;
+// // allow users to upload MULTIPLE images
+// router.post('/upload-photos', upload.array('photos', 8), async (req, res) => {
+//     try {
+//         const photos = req.files;
 
-        // check if photos are available
-        if (!photos) {
-            res.status(400).send({
-                status: false,
-                data: 'No photo is selected.'
-            });
-        } else {
-            let data = [];
+//         // check if photos are available
+//         if (!photos) {
+//             res.status(400).send({
+//                 status: false,
+//                 data: 'No photo is selected.'
+//             });
+//         } else {
+//             let data = [];
 
-            // iterate over all photos
-            photos.map(p => data.push({
-                name: p.originalname,
-                mimetype: p.mimetype,
-                size: p.size
-            }));
+//             // iterate over all photos
+//             photos.map(p => data.push({
+//                 name: p.originalname,
+//                 mimetype: p.mimetype,
+//                 size: p.size
+//             }));
 
-            // send response
-            res.send({
-                status: true,
-                message: 'Photos are uploaded.',
-                data: data
-            });
-        }
+//             // send response
+//             res.send({
+//                 status: true,
+//                 message: 'Photos are uploaded.',
+//                 data: data
+//             });
+//         }
 
-    } catch (err) {
-        res.status(500).send(err);
-    }
-});
+//     } catch (err) {
+//         res.status(500).send(err);
+//     }
+// });
 
 module.exports = router;
