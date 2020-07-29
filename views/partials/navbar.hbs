@@ -1,8 +1,8 @@
 <ul class="nav navbar-nav navbar-right">
   {{#if currentUser}}
-    <li><a href="/routes/logout">Logout</a></li>
+    <p><a href="/auth/logout">Logout</a></p>
   {{else}}
-    <li><a href="/login">Login</a></li>
-    <li><a href="/register">Register</a></li>
+    <p><a href="/auth/login">Login</a> to update your profile</p>
+    <p><a href="/auth/register">Register an account</a></p>
   {{/if}}
 </ul>

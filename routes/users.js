@@ -51,7 +51,6 @@ router.post('/', (req, res, next) => {
   }
 //   console.log(req)
   if (req.files) {
-     // yarn add transloadit || npm i transloadit --save-exact
 
     const transloadit = new Transloadit({
         authKey: process.env.authKey,
@@ -86,12 +85,13 @@ router.post('/', (req, res, next) => {
     }
     // Start the Assembly
     transloadit.createAssembly(options, (err, result) => {
-        if (err) {
-        throw err
+    if (err) {
+        console.log({ err })
+        console.log('fail')
+        } else {
+        console.log('success')
         }
-    
-        // console.log({result})
-        // use mongo save to save the file url 
+        console.log({ result })
     })
   
     // return res.status(400).send('No files were selected')
@@ -147,7 +147,7 @@ router.post('/', (req, res, next) => {
 
 // });
     // If no error make a post that includes the path to the file.
-    users.updateOne({ _id }, { $set: { name, role, sport, biography, profilePhotoPath:picfilePath, resumePath:resfilePath, email, phone } }, (err) => {
+    users.updateOne({ _id }, { $set: { name, role, sport, biography, profilepicture, resume, email, phone } }, (err) => {
         if (err) {
           throw err;
         }

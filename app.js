@@ -18,6 +18,7 @@ const fileupload = require('express-fileupload');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+// var profilesRouter = require('./routes/profiles');
 
 // Add new routes
 // --------------------------------------------------
@@ -111,6 +112,7 @@ app.use((req, res, next) => {
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+// app.use('/profiles', profilesRouter);
 
 // Add new routes
 // --------------------------------------------------

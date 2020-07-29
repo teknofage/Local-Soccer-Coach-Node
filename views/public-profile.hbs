@@ -1,5 +1,5 @@
 
- {{> navbar}}
+ {{!-- {{> navbar}} --}}
 {{> messages }}
 {{#if username}}
 <h2>{{ username }}'s profile</h2>
@@ -28,14 +28,17 @@
     <td>Resume:</td>
     <td>{{ resume }}</td>
   </tr>
-    <tr>
+  <tr>
     <td>Email:</td>
     <td>{{ email }}</td>
   </tr>
-    <tr>
+  <tr>
     <td>Phone:</td>
     <td>{{ phone }}</td>
   </tr>
 </table>
-
+{{#loggedIn}}
+<p><a href="/users" target="_blank">Edit your profile</a></p>
+{{/loggedIn}}
+<p><a href="/" target="_blank">User Index</a></p>
 {{/if}}
