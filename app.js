@@ -14,6 +14,8 @@ const authUtils = require('./utils/auth');
 const session = require('express-session');
 const flash = require('connect-flash');
 const fileupload = require('express-fileupload');
+const multer = require('multer');
+const upload = multer({dest:'uploads/'}).single("demo_image");
 // --------------------------------------------------
 
 var indexRouter = require('./routes/index');
