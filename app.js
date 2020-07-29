@@ -14,6 +14,10 @@ const authUtils = require('./utils/auth');
 const session = require('express-session');
 const flash = require('connect-flash');
 const fileupload = require('express-fileupload');
+const multer = require('multer');
+const cors = require('cors');
+const bodyParser = require('body-parser');
+const morgan = require('morgan');
 // --------------------------------------------------
 
 var indexRouter = require('./routes/index');
@@ -23,6 +27,8 @@ var usersRouter = require('./routes/users');
 // Add new routes
 // --------------------------------------------------
 const authRouter = require('./routes/auth');
+// upload file path
+const FILE_PATH = 'uploads';
 // --------------------------------------------------
 
 var app = express();
@@ -34,7 +40,7 @@ MongoClient.connect('mongodb://localhost', { useNewUrlParser: true }, (err, clie
     throw err;
   }
 
-  const db = client.db('lcsn-db');
+  const db = client.db('lscn-db');
   const users = db.collection('users');
   const profiles = db.collection('profiles');
   app.locals.users = users;
@@ -74,6 +80,10 @@ passport.deserializeUser((id, done) => {
 });
 // --------------------------------------------------
 
+// configure multer
+const upload = multer({
+    dest: `${FILE_PATH}/`
+});
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -90,6 +100,12 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(fileupload());
+// enable CORS
+app.use(cors());
+// add other middleware
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(morgan('dev'));
 
 
 // Configure session, passport, flash

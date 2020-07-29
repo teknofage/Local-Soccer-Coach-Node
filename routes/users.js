@@ -2,7 +2,15 @@ var express = require('express');
 var router = express.Router();
 const ObjectID = require('mongodb').ObjectID;
 const Transloadit = require('transloadit')
+const multer = require('multer');
+const cors = require('cors');
+const bodyParser = require('body-parser');
+const morgan = require('morgan');
 require('dotenv').config()
+const FILE_PATH = 'uploads';
+const upload = multer({
+    dest: `${FILE_PATH}/`
+});
 
 // Configure user account profile edit
 // --------------------------------------------------
@@ -157,5 +165,67 @@ router.post('/', (req, res, next) => {
   });
 // });
 // --------------------------------------------------
+// allow users to upload SINGLE profile image
+router.post('/upload-avatar', upload.single('avatar'), async (req, res) => {
+    try {
+        const avatar = req.file;
+
+        // make sure file is available
+        if (!avatar) {
+            res.status(400).send({
+                status: false,
+                data: 'No file is selected.'
+            });
+        } else {
+            // send response
+            res.send({
+                status: true,
+                message: 'File is uploaded.',
+                data: {
+                    name: avatar.originalname,
+                    mimetype: avatar.mimetype,
+                    size: avatar.size
+                }
+            });
+        }
+
+    } catch (err) {
+        res.status(500).send(err);
+    }
+});
+
+// allow users to upload MULTIPLE images
+router.post('/upload-photos', upload.array('photos', 8), async (req, res) => {
+    try {
+        const photos = req.files;
+
+        // check if photos are available
+        if (!photos) {
+            res.status(400).send({
+                status: false,
+                data: 'No photo is selected.'
+            });
+        } else {
+            let data = [];
+
+            // iterate over all photos
+            photos.map(p => data.push({
+                name: p.originalname,
+                mimetype: p.mimetype,
+                size: p.size
+            }));
+
+            // send response
+            res.send({
+                status: true,
+                message: 'Photos are uploaded.',
+                data: data
+            });
+        }
+
+    } catch (err) {
+        res.status(500).send(err);
+    }
+});
 
 module.exports = router;
