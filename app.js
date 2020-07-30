@@ -35,13 +35,14 @@ var app = express();
 
 // Connect to db
 // --------------------------------------------------
-MongoClient.connect(process.env.MONGODB_URI?authSource=admin || 'mongodb://localhost', { useNewUrlParser: true }, (err, client) => {
+MongoClient.connect(process.env.MONGODB_URI || 'mongodb://localhost', { useNewUrlParser: true }, (err, client) => {
   if (err) {
     throw err;
   }
 //   ?authSource=admin
+  const db = client.db('lscn-db');
 
-  const db = client.db('heroku_c2wdfmns');
+//   const db = client.db('heroku_c2wdfmns');
   const users = db.collection('users');
   const profiles = db.collection('profiles');
   app.locals.users = users;

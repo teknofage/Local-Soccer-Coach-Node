@@ -52,12 +52,12 @@ router.get('/:username', (req, res, next) => {
 // Handle updating user profile data
 // --------------------------------------------------
 router.post('/', (req, res, next) => {
-    console.log('&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&')
-    console.log(req.files)
   if (!req.isAuthenticated()) {
     res.redirect('/auth/login');
   }
-//   console.log(req)
+  const users = req.app.locals.users;
+  const { name, role, sport, biography, profilepicture, resume, email, phone } = req.body;
+  const _id = ObjectID(req.session.passport.user);
   if (req.files) {
 
     const transloadit = new Transloadit({
@@ -73,20 +73,11 @@ router.post('/', (req, res, next) => {
         }
     }
     
-    // Add files to upload
-    // check which files have been added and whether there are 1 or 2 files, check file inputs
-    // if the form element has a file, upload it, otherwise don't do anything.
-    // What are these arguments? (filename? path?)
-    console.log("*******************************************")
-    console.log(req.files.profilepicture)
-    console.log(req.files.resume)
-    const profilepicture = req.files.profilepicture
-    const resume = req.files.resume
-    // console.log(profilepicture.path)
+    let profilepicture = req.files.profilepicture
+    let resume = req.files.resume
 
     // if there is a picture:
     if(profilepicture) {
-        console.log(profilepicture.name, profilepicture.tempFilePath)
         transloadit.addFile(profilepicture.name, profilepicture.tempFilePath)
     }
     // if there is a pdf:
@@ -94,105 +85,57 @@ router.post('/', (req, res, next) => {
         transloadit.addFile(resume.name, resume.tempFilePath)
     }
     // Start the Assembly
-    console.log('+++++++++++++++++++++++++++++++++++++++++++++++++++++')
     transloadit.createAssembly(options, (err, result) => {
         if (err) {
-            console.log({ err })
-            console.log('fail')
-            // response redirect to upload failure
+            console.log(err)
+            res.redirect('/users')
 
         } else {
             console.log('success')
-            console.log({ result })
-            console.log(result['uploads'][0]["ssl_url"])
+            const obj = { name, role, sport, biography, email, phone }
             // response redirect to display file needed here
-            const users = req.app.locals.users;
-            const { name, role, sport, biography, _, __, email, phone } = req.body;
-            const _id = ObjectID(req.session.passport.user);
-            const profilepicture = result['uploads'][0]["ssl_url"]
-            const resume = result['uploads'][1]["ssl_url"]
+            // let profilepicture = result['uploads'][0]["ssl_url"]
+            // let resume = result['uploads'][1]["ssl_url"]
           
-          
-              // If no error make a post that includes the path to the file.
-              users.updateOne({ _id }, { $set: { name, role, sport, biography, profilepicture, resume, email, phone } }, (err) => {
-                  if (err) {
-                    throw err;
-                  }
-                  
-                  res.redirect('/users');
-                });
+            if (profilepicture) {
+                obj.profilepicture = result['uploads'][0]["ssl_url"]
+                if (resume) {
+                    obj.resume = result['uploads'][1]["ssl_url"]
+                }
+            } else if (resume) {
+                obj.resume = result['uploads'][0]["ssl_url"]
+            }
+            // possible resume could be index 0 if profile picture is not updated
+            
+            // { name, role, sport, biography, profilepicture, resume, email, phone }
+            // If no error make a post that includes the path to the file.
+            users.updateOne({ _id }, { $set: obj }, (err) => {
+                if (err) {
+                throw err;
+                }
+                
+                res.redirect('/users');
+            });
         }
+        
         
     })
   
+  } else {
+    const { name, role, sport, biography, email, phone } = req.body;
+    users.updateOne({ _id }, { $set: { name, role, sport, biography, email, phone } }, (err) => {
+        if (err) {
+            throw err;
+        }
+        
+        res.redirect('/users');
+    });
+
   }
 
 
 
   });
-// });
-// --------------------------------------------------
-// // allow users to upload SINGLE profile image
-// router.post('/upload-avatar', upload.single('avatar'), async (req, res) => {
-//     try {
-//         const avatar = req.file;
 
-//         // make sure file is available
-//         if (!avatar) {
-//             res.status(400).send({
-//                 status: false,
-//                 data: 'No file is selected.'
-//             });
-//         } else {
-//             // send response
-//             res.send({
-//                 status: true,
-//                 message: 'File is uploaded.',
-//                 data: {
-//                     name: avatar.originalname,
-//                     mimetype: avatar.mimetype,
-//                     size: avatar.size
-//                 }
-//             });
-//         }
-
-//     } catch (err) {
-//         res.status(500).send(err);
-//     }
-// });
-
-// // allow users to upload MULTIPLE images
-// router.post('/upload-photos', upload.array('photos', 8), async (req, res) => {
-//     try {
-//         const photos = req.files;
-
-//         // check if photos are available
-//         if (!photos) {
-//             res.status(400).send({
-//                 status: false,
-//                 data: 'No photo is selected.'
-//             });
-//         } else {
-//             let data = [];
-
-//             // iterate over all photos
-//             photos.map(p => data.push({
-//                 name: p.originalname,
-//                 mimetype: p.mimetype,
-//                 size: p.size
-//             }));
-
-//             // send response
-//             res.send({
-//                 status: true,
-//                 message: 'Photos are uploaded.',
-//                 data: data
-//             });
-//         }
-
-//     } catch (err) {
-//         res.status(500).send(err);
-//     }
-// });
 
 module.exports = router;
