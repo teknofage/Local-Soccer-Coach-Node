@@ -1,15 +1,8 @@
 <!-- Headings -->
 # **Local Soccer Coach**
 
-![Docker Image Size (latest by date)](https://img.shields.io/docker/image-size/teknofage/Local-Soccer-Coach-Node?sort=date&style=for-the-badge)
 
-![Cirrus CI - Specific Branch Build Status](https://img.shields.io/cirrus/github/teknofage/Local-Soccer-Coach-Node?style=for-the-badge)
-
-![CircleCI](https://img.shields.io/circleci/build/github/teknofage/Local-Soccer-Coach-Node?/)
-
-![Docker Build Status](https://img.shields.io/docker/build/teknofage/Local-Soccer-Coach-Node?style=for-the-badge)
-
-![Website](https://img.shields.io/website?down_color=light%20grey&down_message=offline&style=for-the-badge&up_color=green&up_message=online&url=https%3A%2F%2Freddit-clone.dev.teknofage.com)
+![Website](https://img.shields.io/website?down_color=light%20grey&down_message=offline&style=for-the-badge&up_color=green&up_message=online&url=https%3A%2F%2Flocal-soccer-coach-node.herokuapp.com/)
 
 ## Local Soccer Coach is a web based forum for connecting sports coaches and scouts with local leagues and teams.
 
@@ -32,10 +25,12 @@ ___
 
 #### Rationale
 
-This was an attempt to refactor an existing Flask project
+This was an intensive sprint attempt to refactor an existing Flask project (https://local-soccer-coach-whmc.herokuapp.com/) in an unfamiliar language, and in a more functional framework, while adding greater functionality. 
 
 
 #### Description
+
+Sports coaches, scouts, doctors and league administrators can connect with, and potentially work with, other professionals and semi-professionals, providing valuable support for athletes and sportsmen and women, ensuring that vitl knowledge and skills are passed on from generation to generation.
 
 Users can register, log in and log out securely. They can also update their user profiles, and upload profile pictures and resumes.
 
@@ -58,19 +53,7 @@ Languages: JavaScript, HTML, CSS
 
 #### Getting Started
 
-##Docker Installation instructions
-
-Make sure you have Docker Hub installed and running on your machine.
-
-$ git clone
-
-Run the following commands:
-
-$ docker-compose up
-
-To save and close the container:
-
-$ docker-compose down
+## See Below
 
 
 
