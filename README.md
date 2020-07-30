@@ -37,9 +37,7 @@ This was an attempt to refactor an existing Flask project
 
 #### Description
 
-Users can post questions, respond to others, and upvote or downvote responses. 
-
-They can also seach their posts and sort posts by category.
+Users can register, log in and log out securely. They can also update their user profiles, and upload profile pictures and resumes.
 
 
 Frameworks: Node.js, Handlebars.js
@@ -79,7 +77,7 @@ $ docker-compose down
 
 #### Useful Links
 
-Live App: 
+Live App: https://local-soccer-coach-node.herokuapp.com/
 
 
 
