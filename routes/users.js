@@ -94,8 +94,6 @@ router.post('/', (req, res, next) => {
             console.log('success')
             const obj = { name, role, sport, biography, email, phone }
             // response redirect to display file needed here
-            // let profilepicture = result['uploads'][0]["ssl_url"]
-            // let resume = result['uploads'][1]["ssl_url"]
           
             if (profilepicture) {
                 obj.profilepicture = result['uploads'][0]["ssl_url"]
@@ -105,9 +103,7 @@ router.post('/', (req, res, next) => {
             } else if (resume) {
                 obj.resume = result['uploads'][0]["ssl_url"]
             }
-            // possible resume could be index 0 if profile picture is not updated
             
-            // { name, role, sport, biography, profilepicture, resume, email, phone }
             // If no error make a post that includes the path to the file.
             users.updateOne({ _id }, { $set: obj }, (err) => {
                 if (err) {
