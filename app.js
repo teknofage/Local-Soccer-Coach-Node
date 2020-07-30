@@ -35,7 +35,7 @@ var app = express();
 
 // Connect to db
 // --------------------------------------------------
-MongoClient.connect(process.env.MONGODB_URI || 'mongodb://localhost', { useNewUrlParser: true }, (err, client) => {
+MongoClient.connect(process.env.MONGODB_URI?authSource=admin || 'mongodb://localhost', { useNewUrlParser: true }, (err, client) => {
   if (err) {
     throw err;
   }
