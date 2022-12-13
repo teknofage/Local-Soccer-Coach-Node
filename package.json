@@ -15,7 +15,7 @@
     "debug": "~2.6.9",
     "dotenv": "^8.2.0",
     "ejs": "2.x",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "express-fileupload": "^1.1.9",
     "express-flash": "0.0.2",
     "express-session": "^1.16.2",
